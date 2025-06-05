@@ -24,195 +24,76 @@ class ImagePanel extends JPanel{
 class GUI {
     private int sueldo = 2000;
     private Moneda moneda = null;
-    private Producto producto = new Sprite(1);
-    Comprador comprador = null;
-    Expendedor expendedor = new Expendedor(100);
+    private Comprador comprador = null;
+    private Expendedor expendedor = new Expendedor(100);
     private int vuelto = 0;
+    private JFrame frame;
+    private JLabel persona;
+    private JLabel SueldoActual;
+
+    private Icon iconCoca, iconSprite, iconFanta, iconSuper8, iconSnickers;
+    private Icon icon100, icon500, icon1000, iconExp, iconPersona1, iconPersona100, iconPersona500, iconPersona1000;
 
     public GUI() {
-        JFrame frame = new JFrame();
+        frame = new JFrame("Maquina Expendedora");
+        cargarImagenes();
+        inicializarGUI();
+    }
+
+    private void cargarImagenes(){
+        iconCoca = cargarIcono("/Productos/coca.png", 64, 64);
+        iconSprite = cargarIcono("/Productos/sprite.png", 64, 64);
+        iconFanta = cargarIcono("/Productos/fanta.png", 64, 64);
+        iconSuper8 = cargarIcono("/Productos/super8.png", 64, 64);
+        iconSnickers = cargarIcono("/Productos/snickers.png", 64, 64);
+
+        icon100 = new ImageIcon(getClass().getResource("/Imagenes/Monedas/100.png"));
+        icon500 = new ImageIcon(getClass().getResource("/Imagenes/Monedas/500.png"));
+        icon1000 = new ImageIcon(getClass().getResource("/Imagenes/Monedas/1000.png"));
+        iconExp = new ImageIcon(getClass().getResource("/Imagenes/Productos/Exp.png"));
+        iconPersona1 = new ImageIcon(getClass().getResource("/Imagenes/Productos/persona1.png"));
+        iconPersona100 = new ImageIcon(getClass().getResource("/Imagenes/Productos/persona100.png"));
+        iconPersona500 = new ImageIcon(getClass().getResource("/Imagenes/Productos/persona500.png"));
+        iconPersona1000 = new ImageIcon(getClass().getResource("/Imagenes/Productos/persona1000.png"));
+    }
+
+    private ImageIcon cargarIcono(String ruta, int ancho, int alto) {
+        try {
+            Image img = new ImageIcon(getClass().getResource(ruta)).getImage()
+                    .getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+            return new ImageIcon(img);
+        } catch (Exception e) {
+            System.err.println("Error al cargar imagen: " + ruta);
+            return new ImageIcon(); // Icono vacío si hay error
+        }
+    }
+
+    private void inicializarGUI() {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(300, 300, 100, 300));
         panel.setLayout(null);
         frame.add(panel, BorderLayout.CENTER);
-        Icon icon100 = new ImageIcon(getClass().getResource("/Imagenes/Monedas/100.png"));
-        Icon icon500 = new ImageIcon(getClass().getResource("/Imagenes/Monedas/500.png"));
-        Icon icon1000 = new ImageIcon(getClass().getResource("/Imagenes/Monedas/1000.png"));
-        Icon iconExp = new ImageIcon(getClass().getResource("/Imagenes/Productos/Exp.png"));
-        Icon iconPersona1 = new ImageIcon(getClass().getResource("/Imagenes/Productos/persona1.png"));
-        Icon iconPersona100 = new ImageIcon(getClass().getResource("/Imagenes/Productos/persona100.png"));
-        Icon iconPersona500 = new ImageIcon(getClass().getResource("/Imagenes/Productos/persona500.png"));
-        Icon iconPersona1000 = new ImageIcon(getClass().getResource("/Imagenes/Productos/persona1000.png"));
+
+        persona = new JLabel(iconPersona1);
+        persona.setBounds(250, 263, 150, 400);
+        panel.add(persona);
+
+        JPanel panelMoneda = new JPanel(new GridLayout(2, 2));
+        panelMoneda.setBounds(10, 60, 200, 200);
+        panel.add(panelMoneda);
+
         JButton boton100 = new JButton(icon100);
         JButton boton500 = new JButton(icon500);
         JButton boton1000 = new JButton(icon1000);
         JButton boton0 = new JButton("Cancelar");
-        JButton botonNum = new JButton();
-        JButton botonVue = new JButton();
-        JLabel SueldoActual = new JLabel("Sueldo: " + sueldo);
 
-        JLabel persona = new JLabel();
-        persona.setOpaque(false);
-        persona.setIcon(iconPersona1);
-        persona.setBounds(250, 263, 150, 400);
-        persona.setVisible(true);
-        panel.add(persona);
-
-        //Botones invisibles
-       /* botonNum.setContentAreaFilled(false);
-        botonNum.setBorderPainted(false);
-        botonNum.setFocusPainted(false);
-        botonNum.setOpaque(false);*/
-        botonNum.setText("Num");
-        botonVue.setText("Vuelto");
-        /*
-        botonVue.setContentAreaFilled(false);
-        botonVue.setBorderPainted(false);
-        botonVue.setFocusPainted(false);
-        botonVue.setOpaque(false);*/
-
-        JPanel panelMoneda = new JPanel(new GridLayout(2, 2));
-
-        panelMoneda.setBounds(10, 60, 200, 200);
-
-        panel.add(panelMoneda);
         panelMoneda.add(boton100);
         panelMoneda.add(boton500);
         panelMoneda.add(boton1000);
         panelMoneda.add(boton0);
 
-
-        botonNum.addActionListener(e -> {
-            JDialog dialog = new JDialog();
-            dialog.setModal(true);
-            dialog.setUndecorated(true);
-            dialog.setSize(600, 600);
-            dialog.setLocationRelativeTo(null);
-
-            JPanel ventana = new JPanel();
-            ventana.setBackground(Color.LIGHT_GRAY);
-            ventana.setLayout(new BorderLayout());
-
-            JPanel gridPanel = new JPanel(new GridLayout(3, 2, 10, 10));
-            gridPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-            ArrayList<JButton> botones = new ArrayList<>();
-            for (int i = 1; i <= 6; i++) {
-                JButton btn = new JButton("Botón " + i);
-                botones.add(btn);
-                gridPanel.add(btn);
-            }
-            botones.get(0).setText("Coca");
-            botones.get(0).addActionListener(ev -> {
-                if (moneda.getValor() >= EnumeracionPrecios.values()[1 - 1].getPrecio()) {
-                    try {
-                        comprador = new Comprador(moneda, 1, expendedor);
-                    } catch (PagoIncorrectoException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (PagoInsuficienteException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (NoHayProductoException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    // System.out.println(comprador.queConsumiste());
-                    vuelto += comprador.cuantoVuelto();
-                    persona.setIcon(iconPersona1);
-                    moneda = null;
-                    dialog.dispose();
-                }
-            });
-
-            botones.get(1).setText("Sprite");
-            botones.get(1).addActionListener(ev -> {
-                if (moneda.getValor() >= EnumeracionPrecios.values()[2 - 1].getPrecio()) {
-                    try {
-                        comprador = new Comprador(moneda, 2, expendedor);
-                    } catch (PagoIncorrectoException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (PagoInsuficienteException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (NoHayProductoException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    //System.out.println(comprador.queConsumiste());
-                    vuelto += comprador.cuantoVuelto();
-                    persona.setIcon(iconPersona1);
-                    moneda = null;
-                    dialog.dispose();
-                }
-            });
-
-            botones.get(2).setText("Fanta");
-            botones.get(2).addActionListener(ev -> {
-                if (moneda.getValor() >= EnumeracionPrecios.values()[3 - 1].getPrecio()) {
-                    try {
-                        comprador = new Comprador(moneda, 3, expendedor);
-                    } catch (PagoIncorrectoException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (PagoInsuficienteException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (NoHayProductoException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    //System.out.println(comprador.queConsumiste());
-                    vuelto += comprador.cuantoVuelto();
-                    persona.setIcon(iconPersona1);
-                    moneda = null;
-                    dialog.dispose();
-                }
-            });
-
-            botones.get(3).setText("Super8");
-            botones.get(3).addActionListener(ev -> {
-                if (moneda.getValor() >= EnumeracionPrecios.values()[4 - 1].getPrecio()) {
-                    try {
-                        comprador = new Comprador(moneda, 4, expendedor);
-                    } catch (PagoIncorrectoException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (PagoInsuficienteException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (NoHayProductoException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    // System.out.println(comprador.queConsumiste());
-                    vuelto += comprador.cuantoVuelto();
-                    persona.setIcon(iconPersona1);
-                    moneda = null;
-                    dialog.dispose();
-                }
-            });
-
-            botones.get(4).setText("Snicker");
-            botones.get(4).addActionListener(ev -> {
-                if (moneda.getValor() >= EnumeracionPrecios.values()[5 - 1].getPrecio()) {
-                    try {
-                        comprador = new Comprador(moneda, 5, expendedor);
-                    } catch (PagoIncorrectoException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (PagoInsuficienteException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (NoHayProductoException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    // System.out.println(comprador.queConsumiste());
-                    vuelto += comprador.cuantoVuelto();
-                    persona.setIcon(iconPersona1);
-                    moneda = null;
-                    dialog.dispose();
-                }
-            });
-
-            botones.get(5).setText("Cancelar");
-            botones.get(5).addActionListener(ev -> {
-                dialog.dispose();
-            });
-
-            ventana.add(gridPanel, BorderLayout.CENTER);
-            dialog.setContentPane(ventana);
-            dialog.setVisible(true);
-
-        });
-
+        JButton botonNum = new JButton("Productos");
+        JButton botonVue = new JButton("Recibir Vuelto");
 
         ImagePanel Exp = new ImagePanel((ImageIcon) iconExp);
         Exp.setBounds(350, 90, 300, 573);
@@ -223,73 +104,117 @@ class GUI {
         Exp.add(botonNum);
         Exp.add(botonVue);
 
+        botonNum.addActionListener(e -> mostrarDialogoProductos());
+        boton100.addActionListener(e -> insertarMoneda(100, iconPersona100));
+        boton500.addActionListener(e -> insertarMoneda(500, iconPersona500));
+        boton1000.addActionListener(e -> insertarMoneda(1000, iconPersona1000));
+        boton0.addActionListener(e -> cancelarCompra());
+        botonVue.addActionListener(e -> recibirVuelto());
 
-        boton100.addActionListener(e -> {
-            if (sueldo >= 100) {
-                persona.setIcon(iconPersona100);
-                moneda = new Moneda100();
-                sueldo -= 100;
-                SueldoActual.setText("Sueldo: " + sueldo);
-            }
-        });
-
-        boton500.addActionListener(e -> {
-            if (sueldo >= 500) {
-                persona.setIcon(iconPersona500);
-                moneda = new Moneda500();
-                sueldo -= 500;
-                SueldoActual.setText("Sueldo: " + sueldo);
-            }
-        });
-        boton1000.addActionListener(e -> {
-            if (sueldo >= 1000) {
-                persona.setIcon(iconPersona1000);
-                moneda = new Moneda1000();
-                sueldo -= 1000;
-                SueldoActual.setText("Sueldo: " + sueldo);
-            }
-        });
-
-        boton0.addActionListener(e -> {
-            if (moneda != null) {
-                sueldo += moneda.getValor();
-                SueldoActual.setText("Sueldo: " + sueldo);
-                moneda = null;
-                persona.setIcon(iconPersona1);
-            }
-        });
-
-        botonVue.addActionListener(e -> {
-            sueldo += vuelto;
-            vuelto = 0;
-            SueldoActual.setText("Sueldo: " + sueldo);
-
-        });
-
-
+        SueldoActual = new JLabel("Saldo: " + sueldo);
         SueldoActual.setFont(new Font("Arial", Font.PLAIN, 20));
         SueldoActual.setBounds(10, 0, 1000, 50);
         panel.add(SueldoActual);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Test");
         frame.setResizable(false);
         frame.setSize(700, 700);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         panel.setComponentZOrder(persona, 0);
         panel.setComponentZOrder(Exp, 1);
-        //System.out.println(frame.getContentPane().getSize().height);
-        //System.out.println(frame.getContentPane().getSize().width);
     }
 
+    private void mostrarDialogoProductos() {
+        if (moneda == null) {
+            JOptionPane.showMessageDialog(frame, "Primero inserte una moneda", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        JDialog dialog = new JDialog(frame, "Seleccione un producto", true);
+        dialog.setLayout(new GridLayout(2, 3, 10, 10));
+        dialog.setSize(400, 300);
+        dialog.setLocationRelativeTo(frame);
+
+        JButton btnCoca = crearBotonProducto(iconCoca, "Coca-Cola", 1);
+        JButton btnSprite = crearBotonProducto(iconSprite, "Sprite", 2);
+        JButton btnFanta = crearBotonProducto(iconFanta, "Fanta", 3);
+        JButton btnSuper8 = crearBotonProducto(iconSuper8, "Super8", 4);
+        JButton btnSnickers = crearBotonProducto(iconSnickers, "Snickers", 5);
+
+        JButton btnCancelar = new JButton("Cancelar");
+        btnCancelar.addActionListener(e -> dialog.dispose());
+
+        dialog.add(btnCoca);
+        dialog.add(btnSprite);
+        dialog.add(btnFanta);
+        dialog.add(btnSuper8);
+        dialog.add(btnSnickers);
+        dialog.add(btnCancelar);
+
+        dialog.setVisible(true);
+    }
+
+    private JButton crearBotonProducto(Icon icono, String nombre, int idProducto) {
+        JButton btn = new JButton(nombre, icono);
+        btn.setVerticalTextPosition(SwingConstants.BOTTOM);
+        btn.setHorizontalTextPosition(SwingConstants.CENTER);
+
+        btn.addActionListener(e -> {
+            try {
+                comprador = new Comprador(moneda, idProducto, expendedor);
+                vuelto += comprador.cuantoVuelto();
+                persona.setIcon(iconPersona1);
+                moneda = null;
+                JOptionPane.showMessageDialog(frame, "Has comprado: " + nombre, "Compra Exitosa", JOptionPane.INFORMATION_MESSAGE);
+                ((JDialog)btn.getTopLevelAncestor()).dispose();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        return btn;
+    }
+
+    private void insertarMoneda(int valor, Icon iconoPersona) {
+        if (sueldo >= valor) {
+            persona.setIcon(iconoPersona);
+            moneda = crearMoneda(valor);
+            sueldo -= valor;
+            actualizarSaldo();
+        } else {
+            JOptionPane.showMessageDialog(frame, "Saldo insuficiente", "Error", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private Moneda crearMoneda(int valor) {
+        return switch (valor) {
+            case 100 -> new Moneda100();
+            case 500 -> new Moneda500();
+            case 1000 -> new Moneda1000();
+            default -> null;
+        };
+    }
+
+    private void cancelarCompra() {
+        if (moneda != null) {
+            sueldo += moneda.getValor();
+            moneda = null;
+            persona.setIcon(iconPersona1);
+            actualizarSaldo();
+        }
+    }
+    private void recibirVuelto() {
+        sueldo += vuelto;
+        vuelto = 0;
+        actualizarSaldo();
+    }
+    private void actualizarSaldo() {
+        SueldoActual.setText("Saldo: " + sueldo);
+    }
 }
 
-
-
-
-public class Main{
-    public static void main(String[] args){
-        new GUI();
+public class Main {
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new GUI());
     }
 }
