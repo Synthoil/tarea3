@@ -1,3 +1,5 @@
+package tarea3.Logica;
+
 /**
  * Clase que agrupa las bebidas en un tipo de objeto comun.
  */

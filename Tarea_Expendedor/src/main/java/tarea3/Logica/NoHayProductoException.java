@@ -1,3 +1,4 @@
+package tarea3.Logica;
 /**
  * Excepcion lanzada cuando el producto solicitado no esta disponible o no existe.
  */

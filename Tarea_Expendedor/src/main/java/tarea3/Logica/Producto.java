@@ -1,3 +1,4 @@
+package tarea3.Logica;
 /**
  * Clase abstracta ocupada para agrupar dulces y bebidas bajo un mismo tipo de objeto (Es superclase).
  */

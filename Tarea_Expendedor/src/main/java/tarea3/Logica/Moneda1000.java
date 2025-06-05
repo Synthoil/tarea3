@@ -1,8 +1,9 @@
+package tarea3.Logica;
 /**
  * Clase tipo moneda con un valor de 1000
  */
 
-class Moneda1000 extends Moneda{
+public class Moneda1000 extends Moneda{
 
     /**
      * Obtiene las propiedades de moneda.

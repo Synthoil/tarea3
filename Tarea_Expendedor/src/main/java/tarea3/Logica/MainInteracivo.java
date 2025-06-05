@@ -1,3 +1,5 @@
+import tarea3.Logica.*;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 

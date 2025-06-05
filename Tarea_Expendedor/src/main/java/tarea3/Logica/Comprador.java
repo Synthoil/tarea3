@@ -1,8 +1,9 @@
+package tarea3.Logica;
 /**
  * Clase que simula a la persona comprando un producto.
  */
 
-class Comprador{
+public class Comprador{
     /**
      * Sonido o sabor del producto consumido.
      */

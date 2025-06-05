@@ -1,3 +1,4 @@
+package tarea3.Logica;
 /**
  * Objeto tipo Dulce con sabor "super8".
  */

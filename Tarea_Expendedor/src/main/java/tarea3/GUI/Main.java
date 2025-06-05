@@ -1,4 +1,7 @@
+package tarea3.GUI;
+
 import org.w3c.dom.ls.LSOutput;
+import tarea3.Logica.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,19 +11,21 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
 
-class ImagePanel extends JPanel{
+class ImagePanel extends JPanel {
     private Image image;
 
     public ImagePanel(ImageIcon icon) {
         this.image = icon.getImage();
         setLayout(null);
     }
+
     @Override
-    protected void paintComponent(Graphics g){
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(image, 0,0,getWidth(),getHeight(), this);
+        g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
     }
 }
+
 class GUI {
     private int sueldo = 2000;
     private Moneda moneda = null;
@@ -40,12 +45,12 @@ class GUI {
         inicializarGUI();
     }
 
-    private void cargarImagenes(){
-        iconCoca = cargarIcono("/Productos/coca.png", 64, 64);
-        iconSprite = cargarIcono("/Productos/sprite.png", 64, 64);
-        iconFanta = cargarIcono("/Productos/fanta.png", 64, 64);
-        iconSuper8 = cargarIcono("/Productos/super8.png", 64, 64);
-        iconSnickers = cargarIcono("/Productos/snickers.png", 64, 64);
+    private void cargarImagenes() {
+        iconCoca = cargarIcono("/Imagenes/Productos/cocacola.png", 70, 120);
+        iconSprite = cargarIcono("/Imagenes/Productos/sprite.png", 60, 120);
+        iconFanta = cargarIcono("/Imagenes/Productos/fanta.png", 80, 120);
+        iconSuper8 = cargarIcono("/Imagenes/Productos/super8.png", 120, 120);
+        iconSnickers = cargarIcono("/Imagenes/Productos/snickers.png", 86, 120);
 
         icon100 = new ImageIcon(getClass().getResource("/Imagenes/Monedas/100.png"));
         icon500 = new ImageIcon(getClass().getResource("/Imagenes/Monedas/500.png"));
@@ -136,11 +141,11 @@ class GUI {
         dialog.setSize(400, 300);
         dialog.setLocationRelativeTo(frame);
 
-        JButton btnCoca = crearBotonProducto(iconCoca, "Coca-Cola", 1);
-        JButton btnSprite = crearBotonProducto(iconSprite, "Sprite", 2);
-        JButton btnFanta = crearBotonProducto(iconFanta, "Fanta", 3);
-        JButton btnSuper8 = crearBotonProducto(iconSuper8, "Super8", 4);
-        JButton btnSnickers = crearBotonProducto(iconSnickers, "Snickers", 5);
+        JButton btnCoca = crearBotonProducto(iconCoca, 1);
+        JButton btnSprite = crearBotonProducto(iconSprite, 2);
+        JButton btnFanta = crearBotonProducto(iconFanta, 3);
+        JButton btnSuper8 = crearBotonProducto(iconSuper8, 4);
+        JButton btnSnickers = crearBotonProducto(iconSnickers, 5);
 
         JButton btnCancelar = new JButton("Cancelar");
         btnCancelar.addActionListener(e -> dialog.dispose());
@@ -155,8 +160,8 @@ class GUI {
         dialog.setVisible(true);
     }
 
-    private JButton crearBotonProducto(Icon icono, String nombre, int idProducto) {
-        JButton btn = new JButton(nombre, icono);
+    private JButton crearBotonProducto(Icon icono, int idProducto) {
+        JButton btn = new JButton(icono);
         btn.setVerticalTextPosition(SwingConstants.BOTTOM);
         btn.setHorizontalTextPosition(SwingConstants.CENTER);
 
@@ -166,8 +171,8 @@ class GUI {
                 vuelto += comprador.cuantoVuelto();
                 persona.setIcon(iconPersona1);
                 moneda = null;
-                JOptionPane.showMessageDialog(frame, "Has comprado: " + nombre, "Compra Exitosa", JOptionPane.INFORMATION_MESSAGE);
-                ((JDialog)btn.getTopLevelAncestor()).dispose();
+                JOptionPane.showMessageDialog(frame, "Has comprado: " + comprador.queConsumiste(), "Compra Exitosa", JOptionPane.INFORMATION_MESSAGE);
+                ((JDialog) btn.getTopLevelAncestor()).dispose();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -176,6 +181,9 @@ class GUI {
     }
 
     private void insertarMoneda(int valor, Icon iconoPersona) {
+        if (moneda != null) {
+            sueldo += moneda.getValor();
+        }
         if (sueldo >= valor) {
             persona.setIcon(iconoPersona);
             moneda = crearMoneda(valor);
@@ -203,11 +211,13 @@ class GUI {
             actualizarSaldo();
         }
     }
+
     private void recibirVuelto() {
         sueldo += vuelto;
         vuelto = 0;
         actualizarSaldo();
     }
+
     private void actualizarSaldo() {
         SueldoActual.setText("Saldo: " + sueldo);
     }

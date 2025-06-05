@@ -1,9 +1,10 @@
+package tarea3.Logica;
 /**
  * Superclase que agrupa las clases de tipo moneda.
  * Implementa la interfaz "comparable" para permitir la comparación
  * de monedas en función de su valor.
  */
-abstract class Moneda implements Comparable<Moneda>{
+public abstract class Moneda implements Comparable<Moneda>{
 
     /**
      * Constructor vacio
