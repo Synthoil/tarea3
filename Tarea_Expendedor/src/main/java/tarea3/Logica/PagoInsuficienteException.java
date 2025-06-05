@@ -1,4 +1,4 @@
-package tarea3.Logica;
+
 /**
  * Excepcion lanzada cuando la moneda es tipo "null" o no es valida.
  */

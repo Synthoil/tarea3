@@ -1,4 +1,4 @@
-package tarea3.Logica;
+
 /**
  * Clase tipo moneda con un valor de 500.
  */

@@ -1,7 +1,7 @@
-package tarea3.GUI;
+
 
 import org.w3c.dom.ls.LSOutput;
-import tarea3.Logica.*;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,7 +69,7 @@ class GUI {
             return new ImageIcon(img);
         } catch (Exception e) {
             System.err.println("Error al cargar imagen: " + ruta);
-            return new ImageIcon(); // Icono vacío si hay error
+            return new ImageIcon();
         }
     }
 

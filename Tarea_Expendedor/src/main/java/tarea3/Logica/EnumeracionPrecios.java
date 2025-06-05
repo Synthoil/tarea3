@@ -1,4 +1,4 @@
-package tarea3.Logica;
+
 /**
  * Clase que guarda los precios de cada producto.
  * Los productos son Cocacola, Sprite, Fanta, Snickers y Super8 con precios constantes.

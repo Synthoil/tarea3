@@ -1,4 +1,4 @@
-package tarea3.Logica;
+
 /**
  * Superclase que agrupa las clases de tipo moneda.
  * Implementa la interfaz "comparable" para permitir la comparación

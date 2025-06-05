@@ -1,4 +1,4 @@
-package tarea3.Logica;
+
 /**
  * Objeto tipo Bebida con sabor "sprite".
  */

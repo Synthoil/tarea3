@@ -1,4 +1,4 @@
-package tarea3.Logica;
+
 /**
  * Superclase que agrupa los dulces en una unica clase comun.
  */

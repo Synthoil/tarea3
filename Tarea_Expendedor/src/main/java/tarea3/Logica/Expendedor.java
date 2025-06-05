@@ -1,4 +1,4 @@
-package tarea3.Logica;
+
 /**
  * Clase que representa una maquina expendedora que contiene los productos.
  * Los productos se representan con constantes de 1 a 5.
@@ -9,8 +9,8 @@ public class Expendedor {
     public static final int COCA = 1;
     public static final int SPRITE = 2;
     public static final int FANTA = 3;
-    public static final int SNICKERS = 4;
-    public static final int SUPER8 = 5;
+    public static final int SUPER8 = 4;
+    public static final int SNICKERS = 5;
 
     private Deposito<Producto> coca;
     private Deposito<Producto> sprite;
