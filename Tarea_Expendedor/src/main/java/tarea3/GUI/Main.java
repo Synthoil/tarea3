@@ -83,7 +83,7 @@ class GUI {
         frame.add(panel, BorderLayout.CENTER);
 
         persona = new JLabel(iconPersona1);
-        persona.setBounds(250, 263, 150, 400);
+        persona.setBounds(180, 263, 150, 400);
         panel.add(persona);
 
         JPanel panelMoneda = new JPanel(new GridLayout(2, 2));
@@ -124,13 +124,6 @@ class GUI {
         SueldoActual.setBounds(10, 0, 1000, 50);
         panel.add(SueldoActual);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.setSize(700, 700);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        panel.setComponentZOrder(persona, 0);
-        panel.setComponentZOrder(Exp, 1);
 
         JPanel panelMano = new JPanel();
         panelMano.setBounds(20, 450, 150, 100);
@@ -150,6 +143,45 @@ class GUI {
         botonTomar.setBounds(20, 550, 80, 30);
         botonTomar.addActionListener(e -> tomarProducto());
         panel.add(botonTomar);
+
+
+        JLabel imgCoca = new JLabel((ImageIcon)iconCoca);
+        imgCoca.setBounds(380,120,90,110);
+        JLabel imgSprite = new JLabel((ImageIcon)iconSprite);
+        imgSprite.setBounds(490,120,90,110);
+        JLabel imgFanta = new JLabel((ImageIcon)iconFanta);
+        imgFanta.setBounds(380,270,90,110);
+        JLabel imgSuper8 = new JLabel((ImageIcon)iconSuper8);
+        imgSuper8.setBounds(490,270,80,110);
+        JLabel imgSnickers = new JLabel((ImageIcon)iconSnickers);
+        imgSnickers.setBounds(380,400,90,110);
+
+        JLayeredPane lp = new JLayeredPane();
+        lp.setLayout(null);
+        lp.setPreferredSize(new Dimension(700,700));
+
+        lp.add(Exp,Integer.valueOf(0));
+        lp.add(imgCoca,Integer.valueOf(1));
+        lp.add(imgSprite,Integer.valueOf(1));
+        lp.add(imgFanta,Integer.valueOf(1));
+        lp.add(imgSuper8,Integer.valueOf(1));
+        lp.add(imgSnickers,Integer.valueOf(1));
+        lp.add(panelMoneda,Integer.valueOf(1));
+        lp.add(SueldoActual,Integer.valueOf(1));
+        lp.add(persona,Integer.valueOf(1));
+        lp.add(panelMano,Integer.valueOf(1));
+        lp.add(botonTomar,Integer.valueOf(1));
+
+        frame.setContentPane(lp);
+        frame.setVisible(true);
+
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setSize(700, 700);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+
     }
     private void tomarProducto() {
         if (productoEnMano != null) {
