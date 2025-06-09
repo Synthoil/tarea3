@@ -35,6 +35,9 @@ class GUI {
     private JFrame frame;
     private JLabel persona;
     private JLabel SueldoActual;
+    private Producto productoEnMano = null;
+    private JLabel lblProductoEnMano;
+    private JLabel lblSerie;
 
     private Icon iconCoca, iconSprite, iconFanta, iconSuper8, iconSnickers;
     private Icon icon100, icon500, icon1000, iconExp, iconPersona1, iconPersona100, iconPersona500, iconPersona1000;
@@ -128,6 +131,59 @@ class GUI {
         frame.setVisible(true);
         panel.setComponentZOrder(persona, 0);
         panel.setComponentZOrder(Exp, 1);
+
+        JPanel panelMano = new JPanel();
+        panelMano.setBounds(250, 150, 100, 100);
+        panelMano.setLayout(new BorderLayout());
+        panelMano.setOpaque(false);
+
+        lblProductoEnMano = new JLabel("", SwingConstants.CENTER);
+        lblSerie = new JLabel("Serie: -", SwingConstants.CENTER);
+
+        panelMano.add(lblProductoEnMano, BorderLayout.CENTER);
+        panelMano.add(lblSerie, BorderLayout.SOUTH);
+        panel.add(panelMano);
+
+        JButton botonTomar = new JButton("Tomar");
+        botonTomar.setBounds(260, 400, 80, 30);
+        botonTomar.addActionListener(e -> tomarProducto());
+        panel.add(botonTomar);
+    }
+    private void tomarProducto() {
+        if (productoEnMano != null) {
+            JOptionPane.showMessageDialog(frame,
+                    "Has bebido/comido: " + productoEnMano.consumir(),
+                    "Enjoy",
+                    JOptionPane.INFORMATION_MESSAGE);
+            productoEnMano = null;
+            actualizarProductoEnMano();
+        } else {
+            JOptionPane.showMessageDialog(frame,
+                    "No tienes ningún producto",
+                    "Error",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private void actualizarProductoEnMano() {
+        if (productoEnMano != null) {
+            if (productoEnMano instanceof CocaCola) {
+                lblProductoEnMano.setIcon(iconCoca);
+            } else if (productoEnMano instanceof Fanta) {
+                lblProductoEnMano.setIcon(iconFanta);
+            } else if (productoEnMano instanceof Sprite) {
+                lblProductoEnMano.setIcon(iconSprite);
+            } else if (productoEnMano instanceof Snickers) {
+                lblProductoEnMano.setIcon(iconSnickers);
+            } else if (productoEnMano instanceof Super8) {
+                lblProductoEnMano.setIcon(iconSuper8);
+            }
+
+            lblSerie.setText("Serie: " + productoEnMano.getSerie());
+        } else {
+            lblProductoEnMano.setIcon(null);
+            lblSerie.setText("Serie: -");
+        }
     }
 
     private void mostrarDialogoProductos() {
