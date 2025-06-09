@@ -99,4 +99,19 @@ public class Expendedor {
     public Moneda getVuelto() {
         return monVu.getElemento();
     }
+
+    /** Devuelve cuántos productos quedan en el depósito indicado.
+     * @param idProducto Uno de COCA, SPRITE, FANTA, SUPER8, SNICKERS
+     * @return número de elementos disponibles
+     */
+    public int getStock(int idProducto) {
+        return switch (idProducto) {
+            case COCA     -> coca.cantidad();
+            case SPRITE   -> sprite.cantidad();
+            case FANTA    -> fanta.cantidad();
+            case SNICKERS -> snickers.cantidad();
+            case SUPER8   -> super8.cantidad();
+            default       -> 0;
+        };
+    }
 }
