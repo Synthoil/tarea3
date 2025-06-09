@@ -30,4 +30,7 @@ class Deposito<T> {
     public T getElemento() {
         return elementos.isEmpty() ? null : elementos.remove(0);
     }
+    public int cantidad() {
+        return elementos.size();
+    }
 }
