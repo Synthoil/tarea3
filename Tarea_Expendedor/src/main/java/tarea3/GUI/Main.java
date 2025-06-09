@@ -218,19 +218,33 @@ class GUI {
 
     private JButton crearBotonProducto(Icon icono, int idProducto) {
         JButton btn = new JButton(icono);
-        btn.setVerticalTextPosition(SwingConstants.BOTTOM);
-        btn.setHorizontalTextPosition(SwingConstants.CENTER);
-
         btn.addActionListener(e -> {
             try {
                 comprador = new Comprador(moneda, idProducto, expendedor);
+
+                String tipoProducto = comprador.queConsumiste();
+
+                productoEnMano = new Producto() {
+                    @Override
+                    public String consumir() {
+                        return tipoProducto;
+                    }
+                    @Override
+                    public int getSerie() {
+                        return new Random().nextInt(1000);
+                    }
+                };
                 vuelto += comprador.cuantoVuelto();
-                persona.setIcon(iconPersona1);
                 moneda = null;
-                JOptionPane.showMessageDialog(frame, "Has comprado: " + comprador.queConsumiste(), "Compra Exitosa", JOptionPane.INFORMATION_MESSAGE);
-                ((JDialog) btn.getTopLevelAncestor()).dispose();
+                actualizarProductoEnMano();
+                actualizarSaldo();
+                ((JDialog)btn.getTopLevelAncestor()).dispose();
+
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame,
+                        "Error al comprar: " + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
         return btn;
