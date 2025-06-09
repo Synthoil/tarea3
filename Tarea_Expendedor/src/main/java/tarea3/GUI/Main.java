@@ -60,7 +60,6 @@ class GUI {
     private Runnable postCancelarCompraListener;
     private Runnable postConsumirListener;
     private Runnable postActualizarProductoEnManoListener;
-    
     private JLabel stockCoca, stockSprite, stockFanta, stockSuper8, stockSnickers;
 
     /**
