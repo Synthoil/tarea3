@@ -223,13 +223,12 @@ class GUI {
         btn.addActionListener(e -> {
             try {
                 comprador = new Comprador(moneda, idProducto, expendedor);
-
                 String tipoProducto = comprador.queConsumiste();
 
                 productoEnMano = new Producto() {
                     @Override
                     public String consumir() {
-                        return tipoProducto;
+                        return comprador.queConsumiste();
                     }
                     @Override
                     public int getSerie() {
@@ -238,6 +237,7 @@ class GUI {
                 };
                 vuelto += comprador.cuantoVuelto();
                 moneda = null;
+                persona.setIcon(iconPersona1);
                 actualizarProductoEnMano();
                 actualizarSaldo();
                 ((JDialog)btn.getTopLevelAncestor()).dispose();
