@@ -133,9 +133,11 @@ class GUI {
         panel.setComponentZOrder(Exp, 1);
 
         JPanel panelMano = new JPanel();
-        panelMano.setBounds(250, 150, 100, 100);
+        panelMano.setBounds(20, 450, 150, 100);
         panelMano.setLayout(new BorderLayout());
-        panelMano.setOpaque(false);
+        panelMano.setBackground(new Color(240,240,240));
+
+        panelMano.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         lblProductoEnMano = new JLabel("", SwingConstants.CENTER);
         lblSerie = new JLabel("Serie: -", SwingConstants.CENTER);
@@ -145,7 +147,7 @@ class GUI {
         panel.add(panelMano);
 
         JButton botonTomar = new JButton("Tomar");
-        botonTomar.setBounds(260, 400, 80, 30);
+        botonTomar.setBounds(20, 550, 80, 30);
         botonTomar.addActionListener(e -> tomarProducto());
         panel.add(botonTomar);
     }
@@ -167,15 +169,15 @@ class GUI {
 
     private void actualizarProductoEnMano() {
         if (productoEnMano != null) {
-            if (productoEnMano instanceof CocaCola) {
+            if (productoEnMano.consumir().equals("cocacola")) {
                 lblProductoEnMano.setIcon(iconCoca);
-            } else if (productoEnMano instanceof Fanta) {
+            } else if (productoEnMano.consumir().equals("fanta")) {
                 lblProductoEnMano.setIcon(iconFanta);
-            } else if (productoEnMano instanceof Sprite) {
+            } else if (productoEnMano.consumir().equals("sprite")) {
                 lblProductoEnMano.setIcon(iconSprite);
-            } else if (productoEnMano instanceof Snickers) {
+            } else if (productoEnMano.consumir().equals("snickers")) {
                 lblProductoEnMano.setIcon(iconSnickers);
-            } else if (productoEnMano instanceof Super8) {
+            } else if (productoEnMano.consumir().equals("super8")) {
                 lblProductoEnMano.setIcon(iconSuper8);
             }
 
