@@ -2,28 +2,48 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
-
+/**
+ * Panel personalizado que permite mostrar una imagen de fondo redimensionada al tamaño del panel.
+ * Se utiliza para representar gráficamente elementos como la máquina expendedora.
+ */
 class ImagePanel extends JPanel {
     private Image image;
 
+    /**
+     * Crea un nuevo panel con una imagen de fondo obtenida desde un ImageIcon.
+     *
+     * @param icon Icono que contiene la imagen a mostrar como fondo.
+     */
     public ImagePanel(ImageIcon icon) {
         this.image = icon.getImage();
         setLayout(null);
     }
-
+    /**
+     * Sobrescribe el metodo paintComponent para dibujar la imagen de fondo
+     * escalada al tamaño actual del panel.
+     *
+     * @param g Objeto Graphics usado para dibujar.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
     }
 }
-
+/**
+ * Clase que representa la interfaz gráfica de una máquina expendedora.
+ * Permite insertar monedas, seleccionar productos, tomar el producto y recibir el vuelto.
+ * Se encarga de mostrar imágenes, actualizar el estado del usuario, stock y saldo.
+ */
 class GUI {
+    // Atributos de interfaz y lógica de negocio
     private int sueldo = 2000;
     private Moneda moneda = null;
     private Comprador comprador = null;
     private Expendedor expendedor = new Expendedor(100);
     private int vuelto = 0;
+
+    // Componentes gráficos
     private JFrame frame;
     private JLabel persona;
     private JLabel SueldoActual;
@@ -31,23 +51,29 @@ class GUI {
     private JLabel lblProductoEnMano;
     private JLabel lblSerie;
 
+    // Íconos gráficos
     private Icon iconCoca, iconSprite, iconFanta, iconSuper8, iconSnickers;
     private Icon icon100, icon500, icon1000, iconExp, iconPersona1, iconPersona100, iconPersona500, iconPersona1000;
 
+    // Íconos gráficos
     private Runnable postInsertarMonedaListener;
     private Runnable postCancelarCompraListener;
     private Runnable postConsumirListener;
     private Runnable postActualizarProductoEnManoListener;
-
+    
     private JLabel stockCoca, stockSprite, stockFanta, stockSuper8, stockSnickers;
 
-
+    /**
+     * Constructor que inicializa la ventana principal y todos los componentes de la GUI.
+     */
     public GUI() {
         frame = new JFrame("Maquina Expendedora");
         cargarImagenes();
         inicializarGUI();
     }
-
+    /**
+     * Carga todas las imágenes necesarias como íconos redimensionados.
+     */
     private void cargarImagenes() {
         iconCoca = cargarIcono("/Imagenes/Productos/cocacola.png", 70, 120);
         iconSprite = cargarIcono("/Imagenes/Productos/sprite.png", 60, 120);
@@ -75,7 +101,9 @@ class GUI {
             return new ImageIcon();
         }
     }
-
+    /**
+     * Inicializa los componentes de la interfaz gráfica.
+     */
     private void inicializarGUI() {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(300, 300, 100, 300));
@@ -229,6 +257,10 @@ class GUI {
         actualizarStocks();
 
     }
+    /**
+     * Permite al usuario tomar el producto actualmente en mano.
+     * Muestra un mensaje con el resultado de consumir el producto.
+     */
     private void tomarProducto() {
         if (productoEnMano != null) {
             JOptionPane.showMessageDialog(frame,
@@ -244,7 +276,9 @@ class GUI {
                     JOptionPane.WARNING_MESSAGE);
         }
     }
-
+    /**
+     * Actualiza la vista del producto en mano (imagen y número de serie).
+     */
     private void actualizarProductoEnMano() {
         if (productoEnMano != null) {
             if (productoEnMano.consumir().equals("cocacola")) {
@@ -265,7 +299,10 @@ class GUI {
             lblSerie.setText("Serie: -");
         }
     }
-
+    /**
+     * Muestra un diálogo con los productos disponibles para que el usuario elija uno.
+     * Si no se ha insertado una moneda, muestra un mensaje de advertencia.
+     */
     private void mostrarDialogoProductos() {
         if (moneda == null) {
             JOptionPane.showMessageDialog(frame, "Primero inserte una moneda", "Error", JOptionPane.WARNING_MESSAGE);
@@ -295,7 +332,9 @@ class GUI {
 
         dialog.setVisible(true);
     }
-
+    /**
+     * Actualiza la visualización del stock de cada producto en pantalla.
+     */
     private void actualizarStocks() {
         stockCoca   .setText(expendedor.getStock(1) + " disp.");
         stockSprite .setText(expendedor.getStock(2) + " disp.");
@@ -305,7 +344,13 @@ class GUI {
     }
 
 
-
+    /**
+     * Crea un botón asociado a un producto con ícono y acción de compra.
+     *
+     * @param icono Ícono que representa el producto.
+     * @param idProducto Identificador del producto a comprar.
+     * @return Botón configurado.
+     */
     private JButton crearBotonProducto(Icon icono, int idProducto) {
         JButton btn = new JButton(icono);
         btn.addActionListener(e -> {
@@ -340,7 +385,12 @@ class GUI {
         });
         return btn;
     }
-
+    /**
+     * Permite insertar una moneda en la máquina si el saldo del usuario es suficiente.
+     *
+     * @param valor Valor de la moneda a insertar (100, 500, 1000).
+     * @param iconoPersona Ícono de la persona con la moneda correspondiente.
+     */
     private void insertarMoneda(int valor, Icon iconoPersona) {
         if (moneda != null) {
             sueldo += moneda.getValor();
@@ -354,7 +404,12 @@ class GUI {
             JOptionPane.showMessageDialog(frame, "Saldo insuficiente", "Error", JOptionPane.WARNING_MESSAGE);
         }
     }
-
+    /**
+     * Crea una instancia de una moneda correspondiente al valor entregado.
+     *
+     * @param valor Valor de la moneda.
+     * @return Objeto de tipo Moneda correspondiente.
+     */
     private Moneda crearMoneda(int valor) {
         return switch (valor) {
             case 100 -> new Moneda100();
@@ -363,7 +418,9 @@ class GUI {
             default -> null;
         };
     }
-
+    /**
+     * Cancela la compra actual devolviendo el valor de la moneda al saldo.
+     */
     private void cancelarCompra() {
         if (moneda != null) {
             sueldo += moneda.getValor();
@@ -372,18 +429,25 @@ class GUI {
             actualizarSaldo();
         }
     }
-
+    /**
+     * Suma el vuelto pendiente al saldo del usuario.
+     */
     private void recibirVuelto() {
         sueldo += vuelto;
         vuelto = 0;
         actualizarSaldo();
     }
-
+    /**
+     * Actualiza la etiqueta de saldo visible en pantalla.
+     */
     private void actualizarSaldo() {
         SueldoActual.setText("Saldo: " + sueldo);
     }
 }
-
+/**
+ * Clase que inicializa la interfaz gráfica de usuario de la máquina expendedora.
+ * Contiene solo el metodo main que lanza la ventana Swing.
+ */
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new GUI());
