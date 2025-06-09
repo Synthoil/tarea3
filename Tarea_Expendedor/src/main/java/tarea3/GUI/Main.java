@@ -1,15 +1,7 @@
 
-
-import org.w3c.dom.ls.LSOutput;
-
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Random;
-import java.util.List;
 
 class ImagePanel extends JPanel {
     private Image image;
@@ -41,6 +33,14 @@ class GUI {
 
     private Icon iconCoca, iconSprite, iconFanta, iconSuper8, iconSnickers;
     private Icon icon100, icon500, icon1000, iconExp, iconPersona1, iconPersona100, iconPersona500, iconPersona1000;
+
+    private Runnable postInsertarMonedaListener;
+    private Runnable postCancelarCompraListener;
+    private Runnable postConsumirListener;
+    private Runnable postActualizarProductoEnManoListener;
+
+    private JLabel stockCoca, stockSprite, stockFanta, stockSuper8, stockSnickers;
+
 
     public GUI() {
         frame = new JFrame("Maquina Expendedora");
@@ -147,14 +147,51 @@ class GUI {
 
         JLabel imgCoca = new JLabel((ImageIcon)iconCoca);
         imgCoca.setBounds(380,120,90,110);
+
         JLabel imgSprite = new JLabel((ImageIcon)iconSprite);
         imgSprite.setBounds(490,120,90,110);
+
         JLabel imgFanta = new JLabel((ImageIcon)iconFanta);
         imgFanta.setBounds(380,270,90,110);
+
         JLabel imgSuper8 = new JLabel((ImageIcon)iconSuper8);
         imgSuper8.setBounds(490,270,80,110);
+
         JLabel imgSnickers = new JLabel((ImageIcon)iconSnickers);
         imgSnickers.setBounds(380,400,90,110);
+
+        stockCoca    = new JLabel("", SwingConstants.CENTER);
+        stockSprite  = new JLabel("", SwingConstants.CENTER);
+        stockFanta   = new JLabel("", SwingConstants.CENTER);
+        stockSuper8  = new JLabel("", SwingConstants.CENTER);
+        stockSnickers= new JLabel("", SwingConstants.CENTER);
+
+        stockCoca   .setOpaque(true);
+        stockCoca   .setBackground(new Color(0, 0, 0, 150));  // negro semitransparente
+        stockCoca   .setForeground(Color.WHITE);
+
+        stockSprite .setOpaque(true);
+        stockSprite .setBackground(new Color(0, 0, 0, 150));
+        stockSprite .setForeground(Color.WHITE);
+
+        stockFanta  .setOpaque(true);
+        stockFanta  .setBackground(new Color(0, 0, 0, 150));
+        stockFanta  .setForeground(Color.WHITE);
+
+        stockSuper8 .setOpaque(true);
+        stockSuper8 .setBackground(new Color(0, 0, 0, 150));
+        stockSuper8 .setForeground(Color.WHITE);
+
+        stockSnickers.setOpaque(true);
+        stockSnickers.setBackground(new Color(0, 0, 0, 150));
+        stockSnickers.setForeground(Color.WHITE);
+
+        stockCoca   .setBounds(380, 120 + 110, 90, 20);   // justo debajo de imgCoca
+        stockSprite .setBounds(490, 120 + 110, 90, 20);
+        stockFanta  .setBounds(380, 270 + 110, 90, 20);
+        stockSuper8 .setBounds(490, 270 + 110, 80, 20);
+        stockSnickers.setBounds(380, 400 + 110, 90, 20);
+
 
         JLayeredPane lp = new JLayeredPane();
         lp.setLayout(null);
@@ -166,6 +203,13 @@ class GUI {
         lp.add(imgFanta,Integer.valueOf(1));
         lp.add(imgSuper8,Integer.valueOf(1));
         lp.add(imgSnickers,Integer.valueOf(1));
+
+        lp.add(stockCoca,     Integer.valueOf(1));
+        lp.add(stockSprite,   Integer.valueOf(1));
+        lp.add(stockFanta,    Integer.valueOf(1));
+        lp.add(stockSuper8,   Integer.valueOf(1));
+        lp.add(stockSnickers, Integer.valueOf(1));
+
         lp.add(panelMoneda,Integer.valueOf(1));
         lp.add(SueldoActual,Integer.valueOf(1));
         lp.add(persona,Integer.valueOf(1));
@@ -181,6 +225,8 @@ class GUI {
         frame.setSize(700, 700);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        actualizarStocks();
 
     }
     private void tomarProducto() {
@@ -250,6 +296,16 @@ class GUI {
         dialog.setVisible(true);
     }
 
+    private void actualizarStocks() {
+        stockCoca   .setText(expendedor.getStock(1) + " disp.");
+        stockSprite .setText(expendedor.getStock(2) + " disp.");
+        stockFanta  .setText(expendedor.getStock(3) + " disp.");
+        stockSuper8 .setText(expendedor.getStock(4) + " disp.");
+        stockSnickers.setText(expendedor.getStock(5) + " disp.");
+    }
+
+
+
     private JButton crearBotonProducto(Icon icono, int idProducto) {
         JButton btn = new JButton(icono);
         btn.addActionListener(e -> {
@@ -272,6 +328,7 @@ class GUI {
                 persona.setIcon(iconPersona1);
                 actualizarProductoEnMano();
                 actualizarSaldo();
+                actualizarStocks();
                 ((JDialog)btn.getTopLevelAncestor()).dispose();
 
             } catch (Exception ex) {
